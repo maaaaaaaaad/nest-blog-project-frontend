@@ -15,8 +15,8 @@ interface ContextValueType {
   logout?: (...p: any) => any;
 }
 
-export const AuthContext: any = createContext<ContextValueType | null>(null);
-export const useAuth: any = () => useContext(AuthContext);
+export const AuthContext = createContext<ContextValueType | null>(null);
+export const useAuth = () => useContext(AuthContext);
 
 interface IAuthState {
   authClient: any;
@@ -79,7 +79,26 @@ class AuthProvider extends Component<{}, IAuthState> {
   };
 
   render() {
-    return <div></div>;
+    const { children } = this.props;
+    const { user, authClient, isAuthenticated, isLoading } = this.state;
+
+    const realAuthClient: Auth0Client = authClient;
+
+    const configValues = {
+      user,
+      isAuthenticated,
+      isLoading,
+      getIdTokenClaims: (...x: any) => realAuthClient.getIdTokenClaims(...x),
+      loginWithRedirect: (...x: any) => realAuthClient.loginWithRedirect(...x),
+      getTokenSilently: (...x: any) => realAuthClient.getTokenSilently(...x),
+      logout: (...x: any) => realAuthClient.logout(...x),
+    };
+
+    return (
+      <AuthContext.Provider value={configValues}>
+        {children}
+      </AuthContext.Provider>
+    );
   }
 }
 
