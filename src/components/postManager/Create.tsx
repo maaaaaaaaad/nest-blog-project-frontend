@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory, withRouter } from "react-router";
+import { PostDataType } from "./post-interfaces/postDataType.type";
 
 import { IPostValues } from "./post-interfaces/postValue.interface";
 
@@ -15,7 +16,7 @@ const Create = () => {
     e.preventDefault();
     setLoading(true);
 
-    const userPostData = {
+    const userPostData: PostDataType = {
       title: values.title,
       description: values.description,
       body: values.body,
@@ -31,7 +32,7 @@ const Create = () => {
     history.push("/");
   };
 
-  const submitform = async (formData: {}): Promise<boolean> => {
+  const submitform = async (formData: PostDataType): Promise<boolean> => {
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_BASE_URL}/container/post`,
