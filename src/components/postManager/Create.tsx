@@ -1,23 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
-import { useAuth } from "../../auth/contexts/AuthContext";
+import React, { useState } from "react";
+import { useHistory, withRouter } from "react-router";
+
 import { IPostValues } from "./post-interfaces/postValue.interface";
 
 const Create = () => {
   //
   let history = useHistory();
-  const { user, getIdTokenClaims } = useAuth();
 
-  const [author, setAuthor] = useState<string>("");
   const [values, setValues] = useState<IPostValues>([]);
   const [submitSuccess, setSubmitSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (user) {
-      setAuthor(user.name);
-    }
-  }, [user]);
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,7 +19,8 @@ const Create = () => {
       title: values.title,
       description: values.description,
       body: values.body,
-      author,
+      author: values.author,
+      data_posted: values.data_posted,
     };
 
     const checkSubmit = await submitform(userPostData);
@@ -40,19 +33,18 @@ const Create = () => {
 
   const submitform = async (formData: {}): Promise<boolean> => {
     try {
-      const accessToken = await getIdTokenClaims();
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_BASE_URL}/container/post`,
         {
           method: "post",
-          headers: new Headers({
+          headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
-            authorization: `Bearer ${accessToken.__raw}`,
-          }),
+          },
           body: JSON.stringify(formData),
         }
       );
+      console.log(response.ok);
       return response.ok;
     } catch (ex) {
       return false;
@@ -120,6 +112,17 @@ const Create = () => {
             onChange={handleInputOnchange}
           />
         </div>
+        <div>
+          <label htmlFor="data_posted">Data post</label>
+          <input
+            placeholder="data_posted"
+            id="data_posted"
+            type="text"
+            autoComplete="off"
+            name="data_posted"
+            onChange={handleInputOnchange}
+          />
+        </div>
 
         <div>
           <button type="submit">Create new Post</button>
@@ -130,4 +133,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default withRouter(Create);
