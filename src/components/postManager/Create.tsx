@@ -4,7 +4,7 @@ import { PostDataType } from "./post-interfaces/postDataType.type";
 
 import { IPostValues } from "./post-interfaces/postValue.interface";
 
-const Create = () => {
+const Create = (): JSX.Element => {
   //
   let history = useHistory();
 

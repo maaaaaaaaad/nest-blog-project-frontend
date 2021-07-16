@@ -9,7 +9,7 @@ const Home = (): JSX.Element => {
   //
   const [allpostData, setAllPostData] = useState<Array<PostDataType>>([]);
 
-  const getLoadAllPostData = async () => {
+  const getLoadAllPostData = async (): Promise<void> => {
     //
     const res = await fetch(
       `${process.env.REACT_APP_SERVER_BASE_URL}/container/post`,
@@ -19,6 +19,7 @@ const Home = (): JSX.Element => {
     );
 
     const result = await res.json();
+
     setAllPostData(result.datas);
   };
 
@@ -26,13 +27,12 @@ const Home = (): JSX.Element => {
     getLoadAllPostData();
   }, []);
 
-  allpostData && console.log(allpostData);
-
   return (
     <section>
       <ul>
         {allpostData &&
           allpostData.map((data) => (
+            //
             <PostView
               key={data._id}
               title={data.title}
@@ -41,6 +41,7 @@ const Home = (): JSX.Element => {
               author={data.author}
               posted_data={data.data_posted}
             />
+            //
           ))}
       </ul>
     </section>
