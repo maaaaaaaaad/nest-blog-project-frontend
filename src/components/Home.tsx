@@ -1,9 +1,9 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { withRouter } from "react-router";
-import { PostDataType } from "./postManager/post-interfaces/postDataType.type";
-import PostView from "./view/PostView";
+import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { withRouter } from 'react-router';
+import { PostDataType } from './postManager/post-interfaces/postDataType.type';
+import PostView from './view/PostView';
 
 const Home = (): JSX.Element => {
   //
@@ -14,8 +14,8 @@ const Home = (): JSX.Element => {
     const res = await fetch(
       `${process.env.REACT_APP_SERVER_BASE_URL}/container/post`,
       {
-        method: "get",
-      }
+        method: 'get',
+      },
     );
 
     const result = await res.json();
